@@ -1,12 +1,17 @@
 import React, { Component } from 'react'
-import { Text, View, Dimensions, StyleSheet } from 'react-native'
+import { Text, View, StyleSheet } from 'react-native'
+import { width } from '../screens/table'
+import { Colors } from '../colors'
 
 export class TableHeader extends Component {
     render() {
         const arr = ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
         return (
             <View style={styles.container}>
-                {arr.map((a, index) => <View key={index} style={styles.element}><Text style={styles.text}>{a}</Text></View>)}
+                {arr.map((day, index) =>
+                    <View key={index} style={styles.element}>
+                        <Text style={[styles.text,new Date().getDay()==index+1&&{color:Colors.purple}]}>{day}</Text>
+                    </View>)}
             </View>
         )
     }
@@ -14,23 +19,21 @@ export class TableHeader extends Component {
 
 export default TableHeader
 
-const width = (Dimensions.get('window').width) / 5;
+
 const styles = StyleSheet.create({
     element: {
-        width: width,
+        width: width / 5,
         marginVertical: 0,
     },
     text: {
-        textAlign: 'center', fontSize: 16,
+        textAlign: 'center', 
+        fontSize: 16,
         lineHeight: 30,
-        color: 'rgb(156, 159, 169)'
+        color: 'rgba(0,0,0,0.7)'
     },
     container: {
         flexDirection: 'row',
         elevation: 3,
-        shadowColor: '#5061bf',
-        shadowOffset: { width: 1, height: 1 },
-        elevation: 2,
         backgroundColor: 'white',
         marginBottom: 4
     }

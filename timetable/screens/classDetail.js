@@ -8,8 +8,6 @@ export default class ClassDetial extends Component {
 
     }
     render() {
-
-
         const { params } = this.props.route
         return (
             <View>

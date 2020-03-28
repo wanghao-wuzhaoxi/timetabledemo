@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import { Text, View, StyleSheet, ScrollView } from 'react-native'
 import AsyncStorage from '@react-native-community/async-storage';
-import Util from '../util';
+import Course from '../util';
 import Request from '../retrieve'
-import { createStackNavigator } from '@react-navigation/stack';
+import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
 import Table from './table';
 import ClassDetial from './classDetail';
 import MenuCard from '../components/menuCard';
@@ -13,17 +13,22 @@ import TodayCourse from '../components/todayCourse';
 import Ecard from './everyday';
 import SplashScreen from 'react-native-splash-screen'
 
-
 const startDate = new Date(2020, 1, 23)
+const curDate=new Date()
 export const teachingWeek = Math.ceil(((Date.now() - Number(startDate)) / 1000 / 60 / 60 / 24 / 7))
 
 const HomeStack = createStackNavigator();
+
+
 
 export function HomeStackScreen() {
     return (
         <HomeStack.Navigator>
             <HomeStack.Screen name="主页" component={Home} />
-            <HomeStack.Screen name="课表" component={Table} />
+            <HomeStack.Screen name="课表" component={Table} options={{
+                ...TransitionPresets.ModalTransition,
+
+            }} />
             <HomeStack.Screen name="课程详情" component={ClassDetial} />
             <HomeStack.Screen name="校园卡" component={Ecard} />
         </HomeStack.Navigator>
@@ -38,6 +43,7 @@ for (var n = 0; n < 42; n++) {
 }
 
 export class Home extends Component {
+
     constructor(props) {
         super(props);
         this.state = {
@@ -53,31 +59,39 @@ export class Home extends Component {
         SplashScreen.hide();
         try {
             let json = await AsyncStorage.getItem('kebiao');
-            let login = Request.ecardlogin();
-       
+            Request.ecardlogin().then(res => {
+                console.log('电子账户', res.data.msg)
+            });
 
-            if (json) {
-                let data = JSON.parse(json);
-                console.log(data)
-                this.setState({ courses: data, loading: false })
-            }
+            if (json) {this.setState({ courses: JSON.parse(json), loading: false })
+        console.log(json)
+        }
+
             else {
                 await Request.login();
-                let data1 = await Request.getTimeTable()
-                let data2 = await Util.parseCourse(data1.data)
-                let data3 = await Util.parseWeek(data2)
-                await Util.prototype.save('kebiao', JSON.stringify(data3))
+                let { data } = await Request.getTimeTable()
+                let courses = Course.createBatch(data)
+
+                await Course.save('kebiao', JSON.stringify(courses))
+
                 let json = await AsyncStorage.getItem('kebiao');
                 if (json) {
                     let data = JSON.parse(json);
                     this.setState({ courses: data, loading: false })
                 }
             }
-         
+            let res = await Promise.all([Request.ecardget(), Request.eCardInfo()])
+            const bankBalance = res[0].data.match(/余额:\d+.\d+/)[0]
+            const ecardNum = res[0].data.match(/<em>\d+/)[0].substring(4)
+            const bankCard = res[0].data.match(/<span>\d+\*+\d+/)[0].substring(7)
+            const ecardbalance = res[1].data.match(/red">\d+.\d+/)[0].substring(5)
+            this.setState({ balance: bankBalance, ecardNum: ecardNum, bankCard: bankCard, ecardbalance: ecardbalance })
+
+
         } catch (error) {
-            console.log('获取数据出错啦');
-            console.log(error)
+            console.log('数据加载失败', error);
         }
+
         this.setState({ loading: false })
 
     }
@@ -85,19 +99,21 @@ export class Home extends Component {
 
 
     render() {
-        const todayCourse = this.state.courses && this.state.courses.filter(course =>
-            course.weeks.indexOf(teachingWeek) !== -1 &
-            course.xq == new Date().getDay()).sort((a, b) => a.jc - b.jc)
+        //筛选出周数包含当前教学周，且当天正在上的课并按照课程的节次升序排列
+        const todayCourse = this.state.courses && this.state.courses.filter(
+            course =>course.weeks.indexOf(teachingWeek) !== -1 &course.xq == curDate.getDay())
+            .sort((a, b) => a.jc - b.jc)
 
 
         return (
             <>
                 <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{ flexGrow: 0, backgroundColor: Colors.light, height: 100 }}>
-                    <MenuCard title='完整课表' charCode={10687} nav={() => this.props.navigation.navigate('课表', { staff: this.state.staff, courses: this.state.courses })}></MenuCard>
+                    <MenuCard title='完整课表' charCode={10687} nav={() => this.state.courses&&this.props.navigation.navigate('课表', { staff: this.state.staff, courses: this.state.courses })}></MenuCard>
                     <MenuCard title='我的教务' charCode={10163} nav={() => this.props.navigation.navigate('课表', { staff: this.state.staff, courses: this.state.courses })}></MenuCard>
-                    <MenuCard title='校园卡充值' charCode={9649} nav={() => this.props.navigation.navigate('校园卡')}></MenuCard>
+                    <MenuCard title='校园卡充值' charCode={9649} nav={() => this.props.navigation.navigate('校园卡', { ecardNum: this.state.ecardNum, balance: this.state.balance, bankCard: this.state.bankCard, ecardbalance: this.state.ecardbalance })}></MenuCard>
                     <MenuCard title='校内通知' charCode={9993} nav={() => this.props.navigation.navigate('课表', { staff: this.state.staff, courses: this.state.courses })}></MenuCard>
                 </ScrollView>
+              
 
                 <View>
                     <Text style={styles.title}>TODAY'S COURSES</Text>
@@ -115,7 +131,7 @@ export class Home extends Component {
                         }
 
                         {todayCourse instanceof Array && todayCourse.map((c, index) =>
-                            (<TodayCourse index={index} c={c} key={index}></TodayCourse>)
+                            (<TodayCourse index={index} c={c} key={index} {...this.props}></TodayCourse>)
                         )}
 
                     </ScrollView>

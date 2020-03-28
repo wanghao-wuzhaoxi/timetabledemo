@@ -3,78 +3,52 @@ import AsyncStorage from '@react-native-community/async-storage';
 const testWeeks = /周次：\d+[,-]\d+/g;
 const testTeacher = /上课教师[\S]+/g;
 const testLocation = /上课地点[\S]+/g;
+const testName = /课程名称[\S]+/g;
 
-export default class Util {
-    static parseCourse(data) {
-        return new Promise((resolve, reject) => {
-            data.forEach(course => {
-                const zhouci = course.title.match(testWeeks);
+export default class Course {
+    constructor(data,index) {
+        this.zhouci = data.title.match(testWeeks)[index].substring(3)
+        this.weeks = Course.parseWeek(this.zhouci)
+        this.teacher = data.title.match(testTeacher)[index].substring(5);
+        this.classRoom = data.title.match(testLocation)[index].substring(5);
+        this.name = data.title.match(testName)[index].substring(5);
+        this.jc = data.jc
+        this.xq = data.xq - 1
 
-                course.name = course.kcmc.split(',')[0]
-                course.teacher = course.title.match(testTeacher)[0].substring(5);
-                course.zhouci = zhouci[0].substring(3);
-                course.classRoom = course.title.match(testLocation)[0].substring(5);
 
-
-                if (zhouci.length != 1) {
-                    zhouci.forEach((e, index) => {
-                        const courseNames = course.kcmc.split(',')
-                        const classrooms = course.title.match(testLocation)
-                        const courseTeachers = course.title.match(testTeacher)
-                        if (index !== 0) {
-                            data.push({
-                                jc: course.jc,
-                                xq: course.xq,
-                                name: courseNames[index],
-                                teacher: courseTeachers[index].substring(5),
-                                zhouci: e.substring(3),
-                                classRoom: classrooms[index].substring(5)
-                            })
-                            course.zhouci = zhouci[0].substring(3)
-                        }
-                    })
-                }
-                delete course.title
-                delete course.kcmc
-
-            })
-            resolve(data)
+    }
+    static createBatch(data) {
+        console.log(data)
+        const courses = []
+        data.forEach(item => {
+            for (let i = 0; i < item.title.match(testName).length; i++) courses.push(new Course(item,i))
         })
+        console.log(courses)
+        return courses
     }
 
-    static parseWeek(data) {
-        return new Promise((resolve, reject) => {
-            let reg = /\d+[,-]\d+/g;
-            data.forEach(course => {
-                const zhouci = course.zhouci.match(reg)
 
-                let weeks = []
-                if (zhouci[0].indexOf(',') != -1) {
-                    zhouci[0].split(',').forEach(el => weeks.push(Number(el)))
+    static parseWeek(zhouci) {
+        let weeks = []
+        if (zhouci.indexOf('-') != -1) {
+            for (let i = Number(zhouci.split('-')[0]); i <= Number(zhouci.split('-')[1]); i++) {
+                weeks.push(Number(i))
+            }
+        }
+        if (zhouci.indexOf(',') != -1) zhouci.split(',').forEach(el => weeks.push(Number(el)))
+        return weeks
+    }
 
-                }
-                else if (zhouci[0].indexOf('-') != -1) {
-                    for (var yaya = Number(zhouci[0].split('-')[0]); yaya <= Number(zhouci[0].split('-')[1]); yaya++) {
-                        weeks.push(Number(yaya))
-                    }
-                }
-                course.weeks = weeks
-
+    static save(name, data) {
+        AsyncStorage.setItem(name, data, (a) => console.log(a))
+        .then(d => {
+        console.log(d);
+        console.log(`save ${name
+    } success`);
             })
-            resolve(data)
-        })
-
+            .catch(e => { console.log(e) })
     }
 
 }
 
 
-    Util.prototype.save = function (name, data) {
-    AsyncStorage.setItem(name, data, (a) => console.log(a))
-    .then(d => {
-    console.log(d);
-    console.log(`save ${name
-} success`);
-        })
-        .catch(e => { console.log(e) })
-}

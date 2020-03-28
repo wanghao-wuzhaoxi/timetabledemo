@@ -15,15 +15,9 @@ const scheduleArr = [
 function mapTime(jc) {
     const Time = new Date();
     const time = Time.getHours() + Time.getMinutes() / 60
-    if (time > scheduleArr[jc].start & time < scheduleArr[jc].end) {
-        return 'courseGoingthrough'
-    }
-    if (time > scheduleArr[jc].end) {
-        return 'courseGone'
-    }
-    if (time < scheduleArr[jc].start) {
-        return 'courseTocome'
-    }
+    if (time > scheduleArr[jc].start & time < scheduleArr[jc].end) return 'courseGoingthrough'
+    if (time > scheduleArr[jc].end) return 'courseGone'
+    if (time < scheduleArr[jc].start) return 'courseTocome'
 }
 
 const LeftLogo = (props) => (<Text style={[styles.leftLogo, styles[props.state]]}>
@@ -31,10 +25,11 @@ const LeftLogo = (props) => (<Text style={[styles.leftLogo, styles[props.state]]
 
 export default class TodayCourse extends Component {
 
+
     render() {
         const { index, c } = this.props;
         return (
-            <TouchableNativeFeedback key={index} useForeground={true} onPress={() => { }}>
+            <TouchableNativeFeedback key={index} useForeground={true} onPress={() => this.props.navigation.navigate('课程详情', c)}>
                 <View style={styles.box}>
                     <View style={{ height: '100%', justifyContent: "center" }}>
                         <LeftLogo jieci={`${2 * c.jc - 1}-${c.jc * 2}`} state={mapTime(c.jc - 1)}></LeftLogo>
