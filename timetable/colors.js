@@ -7,5 +7,7 @@ export const Colors = {
     forRed: 'rgb(237, 167, 193)',
     backRed: 'rgb(249, 239, 248)',
     light: 'rgb(249, 248, 254)',
-    purple: 'rgb(68, 36, 169)'
+    purple: '#544BBB',
+    title:'#3c4560',
+    subTitle:'#b8bece'
 } 

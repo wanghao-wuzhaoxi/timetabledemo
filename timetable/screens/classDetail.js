@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, View } from 'react-native'
+import { Text, View, StatusBar } from 'react-native'
 
 
 export default class ClassDetial extends Component {
@@ -11,6 +11,7 @@ export default class ClassDetial extends Component {
         const { params } = this.props.route
         return (
             <View>
+            <StatusBar translucent={true}></StatusBar>
                 <Text>上课老师：{params.teacher}</Text>
                 <Text>课程进度：</Text>
                 <Text>上课周次：{params.zhouci}</Text>

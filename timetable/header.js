@@ -17,7 +17,6 @@ export default class Header extends Component {
                     returnKeyType="done"
                     style={styles.input}
                 />
-
             </View>
         )
     }
