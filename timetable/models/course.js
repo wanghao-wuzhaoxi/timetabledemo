@@ -6,7 +6,7 @@ const testLocation = /上课地点[\S]+/g;
 const testName = /课程名称[\S]+/g;
 
 export default class Course {
-    constructor(data,index) {
+    constructor(data, index) {
         this.zhouci = data.title.match(testWeeks)[index].substring(3)
         this.weeks = Course.parseWeek(this.zhouci)
         this.teacher = data.title.match(testTeacher)[index].substring(5);
@@ -15,14 +15,31 @@ export default class Course {
         this.jc = data.jc
         this.xq = data.xq - 1
     }
+
+    // 生成course对象数组
     static createBatch(data) {
         console.log(data)
         const courses = []
         data.forEach(item => {
-            for (let i = 0; i < item.title.match(testName).length; i++) courses.push(new Course(item,i))
+            for (let i = 0; i < item.title.match(testName).length; i++) courses.push(new Course(item, i))
         })
         console.log(courses)
         return courses
+    }
+    static createBatch1(data) {
+        console.log(data)
+        const coursesObj = {}
+        data.forEach(item => {
+            for (let i = 0; i < item.title.match(testName).length; i++) {
+                let course=new Course(item, i);
+            
+                if(!coursesObj[course.xq+(course.jc-1)*7]) coursesObj[course.xq+(course.jc-1)*7]=[];
+                coursesObj[course.xq+(course.jc-1)*7].push(course)
+         
+            }
+        })
+        console.log(coursesObj)
+        return coursesObj
     }
 
 
@@ -39,10 +56,10 @@ export default class Course {
 
     static save(name, data) {
         AsyncStorage.setItem(name, data, (a) => console.log(a))
-        .then(d => {
-        console.log(d);
-        console.log(`save ${name
-    } success`);
+            .then(d => {
+                console.log(d);
+                console.log(`save ${name
+                    } success`);
             })
             .catch(e => { console.log(e) })
     }

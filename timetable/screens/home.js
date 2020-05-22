@@ -33,9 +33,9 @@ export function HomeStackScreen() {
             <HomeStack.Screen name="课表" component={Table} options={{ headerShown: false }} />
             <HomeStack.Screen name="课程详情" component={ClassDetial} />
             <HomeStack.Screen name="校园卡" component={Ecard} />
-            <HomeStack.Screen name="登录" component={LoginForm} />
-            <HomeStack.Screen name="温湿度监控" component={Monitor} />
-            <HomeStack.Screen name="视频监控" component={VideoMonitor} />
+            {/* <HomeStack.Screen name="登录" component={LoginForm} /> */}
+            {/* <HomeStack.Screen name="温湿度监控" component={Monitor} />
+            <HomeStack.Screen name="视频监控" component={VideoMonitor} /> */}
         </HomeStack.Navigator>
     );
 }
@@ -45,7 +45,7 @@ export class Home extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            staff: Schedule.emptyCell,
+  
             courses: null,
             loading: false,
             logined: false,
@@ -96,6 +96,8 @@ export class Home extends Component {
                 if (needSave) AsyncStorage.setItem('JWAccount', JSON.stringify({ username: this.state.num, password: this.state.psd, name: name }))
                 let { data } = await JWService.getTimeTable();
                 let courses = Course.createBatch(data);
+                let courses1 = Course.createBatch1(data);
+                this.setState({courses1:courses1})
                 await Course.save('kebiao', JSON.stringify(courses));
                 json = await AsyncStorage.getItem('kebiao');
                 if (json) this.setState({ loading: false })
@@ -249,7 +251,7 @@ export class Home extends Component {
                             <Text style={{ fontSize: 19, textAlignVertical: 'center', color: '#3c4560', fontWeight: 'bold' }}>{this.state.jWAccount.name || '未登录'}</Text>
                             <View style={{ position: 'absolute', marginRight: 20, top: 20, right: 0, width: 80, height: 40, borderRadius: 5 }}>
                                 <View style={{ borderRadius: 8 }}>
-                                    <TouchableOpacity onPress={() => this.state.courses && this.props.navigation.navigate('课表', { staff: this.state.staff, courses: this.state.courses })}>
+                                    <TouchableOpacity onPress={() => this.state.courses && this.props.navigation.navigate('课表', { courses: this.state.courses })}>
                                         {/* <Icon name='ios-eye' size={22} color='white'></Icon> */}
                                         <Text style={{ elevation: 10, fontSize: 16, padding: 5, fontWeight: 'bold', color: Colors.title }}> 完整课表</Text>
                                     </TouchableOpacity>

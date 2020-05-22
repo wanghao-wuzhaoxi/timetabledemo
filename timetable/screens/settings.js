@@ -28,10 +28,10 @@ export default class Settings extends Component {
   }
   render() {
     return (
-      <View style={{ backgroundColor: Colors.light }}>
+      <View style={{ backgroundColor: Colors.light,paddingTop:StatusBar.currentHeight }}>
         <StatusBar translucent={true} backgroundColor={'rgba(0,0,0,0.04)'}></StatusBar>
         <Text style={commonStyles.title}>我的信息</Text>
-        <TouchableNativeFeedback useForeground={true} onPress={() => { }} background={TouchableNativeFeedback.Ripple('#BABABB', false)} >
+        {/* <TouchableNativeFeedback useForeground={true} onPress={() => { }} background={TouchableNativeFeedback.Ripple('#BABABB', false)} >
           <View style={{ paddingBottom: 0, height: 60, paddingHorizontal: 15, borderBottomWidth: 1, borderBottomColor: '#eaecea', flexDirection: 'row', alignItems: 'center' }}>
             <Icon name='ios-school' size={22} style={{ marginRight: 10 }} color='#808080' />
             <Text style={{ lineHeight: 40, margin: 0, textAlignVertical: 'center', fontSize: 16, color: '#808080' }}>学号：8305180722</Text>
@@ -48,41 +48,27 @@ export default class Settings extends Component {
             <Icon name='ios-school' size={22} style={{ marginRight: 10 }} color='#808080' />
             <Text style={{ lineHeight: 40, margin: 0, textAlignVertical: 'center', fontSize: 16, color: '#808080' }}>学号：8305180722</Text>
           </View>
-        </TouchableNativeFeedback>
+        </TouchableNativeFeedback> */}
 
 
         {/* <ImageBackground source={require("../assets/Snipa.jpg")} style={{ width: '50%', height: '50%' }}>
           <Text>Inside</Text>
         </ImageBackground> */}
-        <SvgXml xml={xml} width="300" height="300" />
-        <Icon.Button
+        <SvgXml xml={xml} width="100%" height="100%" />
+        {/* <Icon.Button
           name="ios-apps"
           backgroundColor="#3b5998"
           onPress={this.loginWithFacebook}
         >
           Login with Facebook
-        </Icon.Button>
+        </Icon.Button> */}
       </View>)
   }
 }
 
 
 
-const MyButton = (
-  <Icon.Button
-    name="facebook"
-    backgroundColor="#3b5998"
-    onPress={this.loginWithFacebook}
-  >
-    Login with Facebook
-  </Icon.Button>
-);
 
-const customTextButton = (
-  <Icon.Button name="facebook" backgroundColor="#3b5998">
-    <Text style={{ fontFamily: 'Arial', fontSize: 15 }}>
-      Login with Facebook
-    </Text>
-  </Icon.Button>
-);
+
+
 

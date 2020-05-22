@@ -22,19 +22,39 @@ export default class Table extends Component {
 
     constructor(props) {
         super(props);
-    }
-    render() {
-        const shadowOpt = {
-            width: cellWidth,
-            height: 80,
-            color: '#ccc',
-            border: 4,
-            radius: 3,
-            opacity: 0.2,
-            x: .4,
-            y: 1,
+        this.state={
+            staff: Schedule.emptyCell,
+            coursesToShow:this.props.route.params.courses.filter(c => this.courseFilter.showOnlyCurWeek(c)),
+           
         }
-        const { staff, courses } = this.props.route.params
+    }
+
+    courseFilter={
+        showOnlyCurWeek(c){
+            return c.weeks.indexOf(Schedule.curTeachingWeek) !== -1
+        },
+        showAll(c){
+            return c
+        },
+        showSomeWeek(c,weekNum){
+            return c.weeks.indexOf(weekNum) !== -1
+        }
+    }
+
+    
+    render() {
+        // const shadowOpt = {
+        //     width: cellWidth,
+        //     height: 80,
+        //     color: '#ccc',
+        //     border: 4,
+        //     radius: 3,
+        //     opacity: 0.2,
+        //     x: .4,
+        //     y: 1,
+        // }
+        const staff=this.state.staff;
+      
         return (
             <View style={{ flex: 1, paddingTop: StatusBar.currentHeight, backgroundColor: Colors.light }}>
                 <StatusBar translucent={true}></StatusBar>
@@ -43,26 +63,20 @@ export default class Table extends Component {
 
                 <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.background}>
                     <View style={{ width: width * 1.4, flexDirection: 'row', flexWrap: 'wrap', flex: 1, backgroundColor: Colors.light }}>
-                        {/* <Text>5月20日</Text> */}
                         <TableHeader></TableHeader>
                         <View style={{ backgroundColor: Colors.light, width: cellWidth / 2.5, height: '100%', top: 40, position: 'absolute', left: 0, zIndex: 100 }}>
                             {['1-2', '3-4', '5-6', '7-8', '9-10', '10-11'].map((e,index) => <Left jc={e} key={e} courseState={Schedule.mapTime(index)}></Left>)}
                         </View>
                         {staff.map((e, index) => {
-                            const cellCourses = courses.filter((c => c.weeks.indexOf(Schedule.curTeachingWeek) !== -1 & c.jc - 1 == Math.floor(index / 7) & c.xq == index % 7 + 1))
+                          let  cellCourses=this.state.coursesToShow&&this.state.coursesToShow.filter(c=> c.jc - 1 == Math.floor(index / 7) & c.xq == index % 7 + 1)
                             return (
                                 <View style={[styles.table, {
                                     backgroundColor: 'white',
-                                    // backgroundColor: index % 7 != 1 ? 'white' : Colors.light,
-                                    // height:index % 7 == 1 ? 80+cellWidth/10 : 80,
-                                    // marginVertical:index % 7 == 1 ? 0 : cellWidth/20,
-                                    // backgroundColor: Math.floor(index / 7) % 2 == 0 ? 'white' : Colors.light,
-                                    // borderTopWidth:Math.floor(index / 7)%2==0?0:0.8,
-                                    // borderBottomWidth:Math.floor(index / 7)%2==0?0:0.8,
                                     position: 'relative',
                                     left: cellWidth / 2.5,
                                     borderColor: 'rgba(0,0,0,0.2)',
                                 }]} key={index}>
+                                
 
                                     {cellCourses[0] &&
 
@@ -109,18 +123,9 @@ export default class Table extends Component {
 const styles = StyleSheet.create({
     cell: {
         alignItems: 'center',
-        // 
-
         width: cellWidth,
         height: 80,
-        // borderWidth: 1,
         backgroundColor: "#fff",
-        // backgroundColor: "#fff",
-        // borderWidth:1,
-        // borderBottomWidth:0.5,
-        // borderTopWidth:0.5,
-        // elevation:3,
-        // borderRadius: 3,
         overflow: "hidden",
         justifyContent: 'space-around',
         zIndex: 1,
@@ -155,14 +160,11 @@ const styles = StyleSheet.create({
         letterSpacing: 0,
     },
     classRoom: {
-        // color: Colors.darkGray,
-        // color: Colors.purple,
         color: Colors.subTitle,
         marginTop: 2,
         textAlign: 'center',
         fontSize: 13,
         backgroundColor: Colors.light,
-
         borderRadius: 3,
         padding: 1,
         paddingHorizontal: 8,
@@ -174,21 +176,15 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: 0,
         right: 2,
-        // width: '100%',
         height: 10,
         borderRadius: 12,
         color: 'white',
-        // backgroundColor: Colors.backGreen,
     },
     moreText: {
-
         color: Colors.foreGreen,
-        // color: 'white',
         textAlignVertical: 'center',
         fontWeight: 'bold',
         textAlign: 'center',
-        // backgroundColor: 'rgb(204, 245, 255)',
-        // backgroundColor: Colors.backGreen,
         fontWeight: '700'
     },
     element: {
@@ -233,5 +229,4 @@ const Left = function (props) {
         <Text style={[{ color: Colors.foreGreen, textAlign: 'center', textAlignVertical: 'top', fontSize: 16, height: 16 },CourseStatusStyles[props.courseState]]}>ⲓ</Text>
         <Text style={[{ color: Colors.foreGreen, textAlign: 'center', fontWeight: 'bold', textAlignVertical: 'center', fontSize: 16, height: 18 },CourseStatusStyles[props.courseState]]}>{props.jc.split('-')[1]}</Text>
     </View>)
-
 }
