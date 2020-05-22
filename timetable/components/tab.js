@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Text, StyleSheet } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
-import { Colors } from '../colors'
+import { Colors } from '../styles/colors'
 
 export default class Tab extends Component {
     render() {

@@ -3,7 +3,7 @@ import { Text, View, StyleSheet, Dimensions } from 'react-native'
 import MonitorService from '../services/monitorService'
 import WebView from 'react-native-webview';
 import Loading from '../components/loading';
-import { Colors } from '../colors';
+import { Colors } from '../styles/colors';
 import { ScrollView } from 'react-native-gesture-handler';
 export class Monitor extends Component {
 

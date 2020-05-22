@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Text, View, StyleSheet } from 'react-native'
 import { TouchableNativeFeedback } from 'react-native-gesture-handler'
-import { Colors } from '../colors';
+import { Colors } from '../styles/colors';
 import { Schedule } from '../utils/schedule';
 
 

@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { Base64 } from '../encode';
+import { Base64 } from '../utils/encode';
 const defaultHeaderOpt = {
     "Accept": "*/*",
     "X-Requested-With": "XMLHttpRequest",

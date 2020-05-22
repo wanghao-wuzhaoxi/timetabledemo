@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Text, View, Dimensions } from 'react-native'
 import { NodePlayerView } from 'react-native-nodemediaclient';
 import { commonStyles } from './monitor';
-import { Colors } from '../colors';
+import { Colors } from '../styles/colors';
 export class VideoMonitor extends Component {
 
     constructor(props) {

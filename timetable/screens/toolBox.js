@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Text, View, Dimensions, ScrollView, StatusBar } from 'react-native'
-import { Colors } from '../colors'
+import { Colors } from '../styles/colors'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { TouchableNativeFeedback } from 'react-native-gesture-handler';
 

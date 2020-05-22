@@ -5,13 +5,13 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Table from './table';
 import ClassDetial from './classDetail';
 
-import { Colors } from '../colors';
+import { Colors } from '../styles/colors';
 import Loading from '../components/loading';
 import TodayCourse from '../components/todayCourse';
-import Ecard from './everyday';
+import Ecard from './ecard';
 import SplashScreen from 'react-native-splash-screen'
 import LoginForm from './login';
-import { Base64 } from '../encode'
+import { Base64 } from '../utils/encode'
 import EcardService from '../services/ecardService';
 import JWService from '../services/jwService';
 import Course from '../models/course';

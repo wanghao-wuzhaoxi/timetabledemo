@@ -9,7 +9,7 @@ import LoginForm from './login';
 import { SvgXml } from 'react-native-svg';
 // import Icon from 'react-native-vector-icons/FontAwesome';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { Colors } from '../colors';
+import { Colors } from '../styles/colors';
 import { TouchableNativeFeedback } from 'react-native-gesture-handler';
 import { commonStyles } from './monitor';
 

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Text, View, Button, StyleSheet, Keyboard, Animated, Dimensions } from 'react-native'
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler'
-import { Colors } from '../colors'
+import { Colors } from '../styles/colors'
 import { BoxShadow } from 'react-native-shadow'
 import { width } from './table'
 import Icon from 'react-native-vector-icons/Ionicons';

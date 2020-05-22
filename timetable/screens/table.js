@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Text, View, StyleSheet, Dimensions, Button, StatusBar } from 'react-native'
 import { ScrollView, TouchableOpacity, TouchableNativeFeedback } from 'react-native-gesture-handler'
-import { Colors } from '../colors'
+import { Colors } from '../styles/colors'
 import { BoxShadow } from 'react-native-shadow'
 import {
     Menu,
