@@ -3,7 +3,7 @@
 ## 使用方法
 1. 
 ``` bash
-git clone
+git clone https://github.com/wanghao-wuzhaoxi/timetabledemo.git
 ```
 2. 
 ```
