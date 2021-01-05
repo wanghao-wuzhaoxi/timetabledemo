@@ -17,7 +17,7 @@
     "@react-navigation/bottom-tabs": "^5.1.1",
     "@react-navigation/native": "^5.0.9",
     "@react-navigation/stack": "^5.1.1",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "buffer": "^5.4.3",
     "events": "^3.1.0",
     "lottie-react-native": "^3.3.2",
